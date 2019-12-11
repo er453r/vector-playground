@@ -1,3 +1,3 @@
 # Requirements
 
-apt install python-opencv
+apt install python3-opencv
