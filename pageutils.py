@@ -14,6 +14,34 @@ def find_corners(image):
     return order_points_clockwise(features[:, 0])
 
 
+def valid_corners(corners, max_diff=0.2):
+    if len(corners) != 4:
+        print(f"not 4 corners - {len(corners)}...")
+        return False
+
+    left_edge = np.linalg.norm(corners[0] - corners[3])
+    right_edge = np.linalg.norm(corners[1] - corners[2])
+
+    max_edge = max(left_edge, right_edge)
+    diff = abs(left_edge - right_edge)
+
+    if diff > max_edge * max_diff:
+        print(f"edge left/right diff to small {diff}")
+        return False
+
+    top_edge = np.linalg.norm(corners[0] - corners[1])
+    bottom_edge = np.linalg.norm(corners[2] - corners[3])
+
+    max_edge = max(top_edge, bottom_edge)
+    diff = abs(top_edge - bottom_edge)
+
+    if diff > max_edge * max_diff:
+        print(f"edge top/bottom diff to small {diff}")
+        return False
+
+    return True
+
+
 def perspective_transform(img, corners):
     height = max(np.linalg.norm(corners[0] - corners[3]),
                  np.linalg.norm(corners[1] - corners[2]))
@@ -59,3 +87,17 @@ def debug_image(image, corners):
     cv2.line(image, tuple(corners[3]), tuple(corners[0]), color, round(thickness / 2))
 
     return image
+
+
+def preview_ui(image):
+    preview = image.copy()
+
+    corners = find_corners(image)
+
+    if valid_corners(corners):
+        image = perspective_transform(image, corners)
+
+    preview = debug_image(preview, corners)
+
+    cv2.imshow("preview", preview)
+    cv2.imshow("image", image)
