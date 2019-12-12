@@ -5,13 +5,20 @@ import numpy as np
 def find_corners(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray = cv2.medianBlur(gray, 11)
+    gray = cv2.Canny(gray, 120, 255, 1)
+
 
     height, width = gray.shape[:2]
-    min_distance = min(width, height) / 4
+    min_distance = min(width, height) / 2
 
     print(f"{width}x{height} min distance {min_distance}")
 
-    features = cv2.goodFeaturesToTrack(gray, 4, 0.01, min_distance)
+    cv2.imshow("tracked", gray)
+
+    features = cv2.goodFeaturesToTrack(gray, 40, 0.5, 50)
+
+    if features is None:
+        return np.array([])
 
     if len(features) == 4:
         return order_points_clockwise(features[:, 0])
