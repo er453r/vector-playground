@@ -7,11 +7,16 @@ def find_corners(image):
     gray = cv2.medianBlur(gray, 11)
 
     height, width = gray.shape[:2]
-    min_distance = min(width, height) / 20
+    min_distance = min(width, height) / 4
+
+    print(f"{width}x{height} min distance {min_distance}")
 
     features = cv2.goodFeaturesToTrack(gray, 4, 0.01, min_distance)
 
-    return order_points_clockwise(features[:, 0])
+    if len(features) == 4:
+        return order_points_clockwise(features[:, 0])
+
+    return features[:, 0]
 
 
 def valid_corners(corners, max_diff=0.2):
@@ -81,10 +86,11 @@ def debug_image(image, corners):
     for corner in corners:
         cv2.circle(image, tuple(corner), thickness, color, -1)
 
-    cv2.line(image, tuple(corners[0]), tuple(corners[1]), color, round(thickness / 2))
-    cv2.line(image, tuple(corners[1]), tuple(corners[2]), color, round(thickness / 2))
-    cv2.line(image, tuple(corners[2]), tuple(corners[3]), color, round(thickness / 2))
-    cv2.line(image, tuple(corners[3]), tuple(corners[0]), color, round(thickness / 2))
+    if len(corners) == 4:
+        cv2.line(image, tuple(corners[0]), tuple(corners[1]), color, round(thickness / 2))
+        cv2.line(image, tuple(corners[1]), tuple(corners[2]), color, round(thickness / 2))
+        cv2.line(image, tuple(corners[2]), tuple(corners[3]), color, round(thickness / 2))
+        cv2.line(image, tuple(corners[3]), tuple(corners[0]), color, round(thickness / 2))
 
     return image
 
