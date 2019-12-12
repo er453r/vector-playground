@@ -2,16 +2,14 @@ import cv2
 import pageutils
 
 image = cv2.imread("images/test-page.jpg")
+preview = image.copy()
 
-corners = pageutils.corners(image)
+corners = pageutils.find_corners(image)
 
-for i in corners:
-    x, y = i.ravel()
-    cv2.circle(image, (x, y), 3, 255, -1)
+preview = pageutils.debug_image(preview, corners)
+image = pageutils.perspective_transform(image, corners)
 
-warp = pageutils.persp_transform(image, corners)
-
-cv2.imshow("Image", image)
-cv2.imshow("Warp", warp)
+cv2.imshow("preview", preview)
+cv2.imshow("image", image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
