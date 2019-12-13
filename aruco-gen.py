@@ -45,6 +45,10 @@ def draw(commands, size, title, marker_index = 1):
 
         if y == 1 and 1 < x < width:
             cmd = commands[x-2]
+            for axis in ['top', 'left', 'right']:
+                a.spines[axis].set_linewidth(5)
+            a.spines['bottom'].set_linewidth(10)
+
             a.text(0.5, 0.5, cmd, size=48, weight="bold", horizontalalignment="center", verticalalignment="center")
 
     fig.subplots_adjust(wspace=0, hspace=0)
