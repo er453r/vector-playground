@@ -5,8 +5,9 @@ import cv2.aruco as aruco
 
 
 # noinspection PyUnresolvedReferences
-def draw(width, height, marker_index):
-    width += 2  # add technical columns
+def draw(commands, size, title, marker_index = 1):
+    width = len(commands) + 2  # add technical columns
+    height = size
     markers = aruco.Dictionary_get(aruco.DICT_6X6_250)
 
     fig = plt.figure(figsize=(width*2, height*2))  # Notice the equal aspect ratio
@@ -42,10 +43,19 @@ def draw(width, height, marker_index):
             img = aruco.drawMarker(markers, marker_index+3, 700)
             a.imshow(img, cmap=mpl.cm.gray, interpolation="nearest")
 
+        if y == 1 and 1 < x < width:
+            cmd = commands[x-2]
+            a.text(0.5, 0.5, cmd, size=48, weight="bold", horizontalalignment="center", verticalalignment="center")
+
     fig.subplots_adjust(wspace=0, hspace=0)
 
-    plt.savefig("markers.pdf")
+    plt.suptitle(title, size=64, weight="bold", y=0.95)
+    plt.savefig("markers.pdf", bbox_inches='tight')
     plt.show()
 
 
-draw(6, 8, 1)
+draw(commands=[
+    "↑", "↓", "↰", "↱"  # use https://www.key-shortcut.com/en/writing-systems/35-symbols/arrows
+], size=8, title="Test")
+
+print("Done generating pdf!")
