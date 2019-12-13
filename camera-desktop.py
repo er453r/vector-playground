@@ -1,5 +1,5 @@
 import cv2
-import pageutils
+import utils
 
 # noinspection PyArgumentList
 cap = cv2.VideoCapture(0)
@@ -7,7 +7,7 @@ cap = cv2.VideoCapture(0)
 while True:
     ret, image = cap.read()
 
-    pageutils.preview_ui(image)
+    utils.debug_image(image)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

@@ -1,9 +1,10 @@
 import cv2
-import pageutils
 
-image = cv2.imread("images/test-page.jpg")
+import utils
 
-pageutils.preview_ui(image)
+image = cv2.imread("images/aruco-test.jpg")
+
+utils.debug_image(image)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
