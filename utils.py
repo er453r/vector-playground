@@ -75,5 +75,16 @@ def debug_image(image):
 
     corners, ids, cropped = markers(perspective_transform(image, farthest_corners))
 
+    marker_size = np.linalg.norm(corners[0][0][0][0] - corners[0][0][0][1])
+
+    farthest_corners = outer_corners(corners)
+    image_width = np.linalg.norm(farthest_corners[0] - farthest_corners[1])
+    image_height = np.linalg.norm(farthest_corners[1] - farthest_corners[2])
+
+    width = round(image_width / marker_size)
+    height = round(image_height / marker_size)
+
+    print(f"Table size {width}x{height} - marker size {marker_size}, image {image_width}x{image_height}")
+
     show(cropped, "cropped", 0.5)
     show(frame_markers, "debug", 0.5)
